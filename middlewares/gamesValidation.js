@@ -1,16 +1,12 @@
 import Joi from "joi";
 import database from "../database.js";
 
-// export function getGameValidation(req, res, next) {
-    
-// }
-
 export async function postGameValidation(req, res, next) {
     const body = req.body;
 
     const isName = await database.query(`SELECT * FROM games WHERE name = $1`, [body.name]);
 
-    if (isName.rows) {
+    if (isName.rows.length !== 0) {
         return res.status(409).send("Esse jogo já existe, adicione outro!");
     }
     

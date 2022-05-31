@@ -7,7 +7,7 @@ export async function getGames(req, res) {
         
         if(name){
             //name = name.toUpperCase();
-            const games = await database.query(`SELECT * FROM games WHERE name LIKE '${name}%`);
+            const games = await database.query(`SELECT * FROM games WHERE name LIKE '${name}%'`);
             return res.send(games.rows);
         } else {
             const allGames = await database.query("SELECT * FROM games");
@@ -26,7 +26,7 @@ export async function postGame(req, res) {
 
     try {
 
-        await database.query(`INSERT INTO games (name, image, stockTotal, categoryId, pricePerDay) VALUES ($1, $2, $3, $4, $5)`,
+        await database.query(`INSERT INTO games (name, image, "stockTotal", "categoryId", "pricePerDay") VALUES ($1, $2, $3, $4, $5)`,
         [name, image, stockTotal, categoryId, pricePerDay]);
 
         res.status(201).send("Jogo adicionado com sucesso!");
