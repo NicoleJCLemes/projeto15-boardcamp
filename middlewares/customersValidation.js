@@ -4,10 +4,9 @@ import database from "../database.js";
 export async function getOneCustomerValidation(req, res, next) {
     const { id } = req.params;
 
-    const costumer = await database.query(`SELECT * FROM customers WHERE id = ${id}`);
-    console.log(costumer.rows)
+    const customer = await database.query(`SELECT * FROM customers WHERE id = ${id}`);
 
-    if (costumer.rows.length === 0) {
+    if (customer.rows.length === 0) {
         return res.status(404).send("Esse cliente não foi encontrado!")
     }
 

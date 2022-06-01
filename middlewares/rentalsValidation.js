@@ -10,8 +10,13 @@ export async function postRentalsValidation(req, res, next) {
     }
 
     const game = await database.query(`SELECT * FROM games WHERE id = $1`, [gameId]);
-    if (customer.rows.length === 0) {
+    if (game.rows.length === 0) {
         return res.status(400).send("Jogo inexistente!");
+    }
+
+    const rental = await database.query(`SELECT * FROM rentals WHERE "gameId" = $1`, [gameId]);
+    if (rental.rows.length >= game.rows[0].stockTotal) {
+        return res.status(400).send("Jogo não disponível para aluguel!");
     }
 
     const rentalSchema = Joi.object({
@@ -35,8 +40,20 @@ export async function postRentalsValidation(req, res, next) {
     next();
 }
 
-export function finalizeRentalValidation(req, res, next) {
-    
+export async function finalizeRentalValidation(req, res, next) {
+    const { id } = req.params;
+
+    const rental = await database.query(`SELECT * FROM rentals WHERE id = $1`, [id]);
+
+    if (rental.rows.length === 0) {
+        return res.status(404).send("Aluguel inexistente!");
+    }
+
+    if (rental.rows[0].returnDate) {
+        return res.status(400).send("Esse aluguel já foi finalizado!");
+    }
+
+    next();
 }
 
 export async function deleteRentalValidation(req, res, next) {
@@ -49,7 +66,7 @@ export async function deleteRentalValidation(req, res, next) {
     }
 
     if (!rental.rows[0].returnDate) {
-        return res.status(400).send("Esse alguel ainda não foi finalizado!");
+        return res.status(400).send("Esse aluguel ainda não foi finalizado!");
     }
 
     next();

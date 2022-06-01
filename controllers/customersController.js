@@ -26,8 +26,8 @@ export async function getOneCustomer(req, res) {
 
     try {
 
-        const custumer = await database.query(`SELECT * FROM customers WHERE id = ${id}`);
-        return res.send(custumer.rows);
+        const customer = await database.query(`SELECT * FROM customers WHERE id = ${id}`);
+        return res.send(customer.rows[0]);
 
     } catch (error) {
         
