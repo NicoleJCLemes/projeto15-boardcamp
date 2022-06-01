@@ -21,31 +21,38 @@ export async function getRentals(req, res) {
             if (customer.rows.length === 0) {
                 return res.send([]);
             }
-            
-            const {id, customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee, customerName, gameName, categoryId, categoryName} = await customer.rows[0];
-            
-            const customerRentals = [{
-                id,
-                customerId,
-                gameId,
-                rentDate,
-                daysRented,
-                returnDate,
-                originalPrice,
-                delayFee,
-                customer: {
-                    id: customerId,
-                    name: customerName
-                },
-                game: {
-                    id: gameId,
-                    name: gameName,
-                    categoryId,
-                    categoryName
-                }
-            }]
 
-            return res.send(customerRentals);
+            let allRentalsCustomerArray = []
+
+            customer.rows.forEach((client) => {
+                let {id, customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee, customerName, gameName, categoryId, categoryName} = client;
+
+                let rentalsCustomerObject = {
+                    id,
+                    customerId,
+                    gameId,
+                    rentDate,
+                    daysRented,
+                    returnDate,
+                    originalPrice,
+                    delayFee,
+                    customer: {
+                        id: customerId,
+                        name: customerName
+                    },
+                    game: { 
+                        id: gameId,
+                        name: gameName,
+                        categoryId,
+                        categoryName
+                    }
+                }
+
+                allRentalsCustomerArray = [...allRentalsCustomerArray, rentalsCustomerObject]
+
+            })
+
+            return res.send(allRentalsCustomerArray);
             
         }
         
@@ -64,30 +71,38 @@ export async function getRentals(req, res) {
                 return res.send([]);
             }
 
-            const {id, customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee, customerName, gameName, categoryId, categoryName} = games.rows[0];
+            let allRentalsGameArray = []
 
-            const gameRentals = [{
-                id,
-                customerId,
-                gameId,
-                rentDate,
-                daysRented,
-                returnDate,
-                originalPrice,
-                delayFee,
-                customer: {
-                    id: customerId,
-                    name: customerName
-                },
-                game: {
-                    id: gameId,
-                    name: gameName,
-                    categoryId,
-                    categoryName
+            games.rows.forEach((game) => {
+                let {id, customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee, customerName, gameName, categoryId, categoryName} = game;
+
+                let rentalsGameObject = {
+                    id,
+                    customerId,
+                    gameId,
+                    rentDate,
+                    daysRented,
+                    returnDate,
+                    originalPrice,
+                    delayFee,
+                    customer: {
+                        id: customerId,
+                        name: customerName
+                    },
+                    game: { 
+                        id: gameId,
+                        name: gameName,
+                        categoryId,
+                        categoryName
+                    }
                 }
-            }]
 
-            return res.send(gameRentals);
+                allRentalsGameArray = [...allRentalsGameArray, rentalsGameObject]
+
+            })
+
+            return res.send(allRentalsGameArray);
+
         } 
         
         if (!customerIdQuery && !gameIdQuery) {
@@ -104,31 +119,38 @@ export async function getRentals(req, res) {
             if (customers.rows.length === 0) {
                 return res.send([]);
             }
-            
-            const {id, customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee, customerName, gameName, categoryId, categoryName} = customers.rows[0];
 
-            const allRentals = [{
-                id,
-                customerId,
-                gameId,
-                rentDate,
-                daysRented,
-                returnDate,
-                originalPrice,
-                delayFee,
-                customer: {
-                    id: customerId,
-                    name: customerName
-                },
-                game: {
-                    id: gameId,
-                    name: gameName,
-                    categoryId,
-                    categoryName
+            let allRentalsArray = []
+
+            customers.rows.forEach((customer) => {
+                let {id, customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee, customerName, gameName, categoryId, categoryName} = customer;
+
+                let rentalsObject = {
+                    id,
+                    customerId,
+                    gameId,
+                    rentDate,
+                    daysRented,
+                    returnDate,
+                    originalPrice,
+                    delayFee,
+                    customer: {
+                        id: customerId,
+                        name: customerName
+                    },
+                    game: { 
+                        id: gameId,
+                        name: gameName,
+                        categoryId,
+                        categoryName
+                    }
                 }
-            }]
 
-            return res.send(allRentals);
+                allRentalsArray = [...allRentalsArray, rentalsObject]
+
+            })
+
+            return res.send(allRentalsArray);
         }
 
     } catch (error) {
