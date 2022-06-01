@@ -1,16 +1,24 @@
 import database from "../database.js";
 
 export async function getGames(req, res) {
-    const { name } = req.query;
-
+    let { name } = req.query;
+    
     try {
         
         if(name){
-            //name = name.toUpperCase();
-            const games = await database.query(`SELECT * FROM games WHERE name LIKE '${name}%'`);
+            name = name.toUpperCase();
+            const games = await database.query(`
+            SELECT games.*, categories.name as "categoryName" FROM games
+            JOIN categories
+            ON games."categoryId" = categories.id
+            WHERE upper(games.name) LIKE '${name}%'`);
             return res.send(games.rows);
         } else {
-            const allGames = await database.query("SELECT * FROM games");
+            const allGames = await database.query(`
+            SELECT games.*, categories.name as "categoryName" FROM games
+            JOIN categories
+            ON games."categoryId" = categories.id
+            `);
             return res.send(allGames.rows);
         }
 

@@ -6,12 +6,13 @@ export async function getCustomers(req, res) {
     try {
         
         if(cpf){
-            //name = name.toUpperCase();
             const customers = await database.query(`SELECT * FROM customers WHERE cpf LIKE '${cpf}%'`);
             return res.send(customers.rows);
+
         } else {
             const allCustomers = await database.query("SELECT * FROM customers");
             return res.send(allCustomers.rows);
+
         }
 
     } catch (error) {
@@ -24,10 +25,12 @@ export async function getOneCustomer(req, res) {
     const { id } = req.params
 
     try {
-        const costumer = await database.query(`SELECT * FROM customers WHERE id = ${id}`);
-        return res.send(costumer.rows);
+
+        const custumer = await database.query(`SELECT * FROM customers WHERE id = ${id}`);
+        return res.send(custumer.rows);
 
     } catch (error) {
+        
         console.log(error);
         return res.status(500).send("Não foi possível buscar esse cliente!");
 
